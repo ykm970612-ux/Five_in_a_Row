@@ -7,6 +7,7 @@ pygame.init()
 clock= pygame.time.Clock()
 BLACK = (0,0,0)
 WHITE = (255,255,255)
+player = {1:BLACK,2:WHITE}
 
 
 # 바둑판 그리기
@@ -36,15 +37,15 @@ def mouse_to_board(x,y):
 
 # 행렬에 색 칠하기
 def place_stone(board,row,col,color):
-    if board[row][col]:
+    if board[row,col]:
         return False
-    board[row][col] = color
+    board[row,col] = color
 
     return True
 
 # 스크린에 돌 그리기
 def draw_stones(screen, board):
-    color = {1:BLACK,2:WHITE}
+   
     
     for row in range(board.shape[0]):
         for col in range(board.shape[1]):
@@ -54,7 +55,7 @@ def draw_stones(screen, board):
     
             x = (col + 1)*30
             y = (row + 1)*30
-            pygame.draw.circle(screen,color[board[row,col]],(x,y),13)
+            pygame.draw.circle(screen,player[board[row,col]],(x,y),13)
             
 
 
@@ -110,23 +111,17 @@ def main():
         #승리자 판별
         if winner != 0:
             if winner == 1:
-                text = font.render("BLACK WIN",True,BLACK)
+                text = "BLACK WIN"
             else:
-                text = font.render("WHITE WIN",True,WHITE)
-
-            # width // 2, 15
-            text_rext = text.get_rect(center=(width // 2, 15))
-            screen.blit(text,text_rext)
+                text = "WHITE WIN"
         else:
             if turn == 1:
-                text = font.render("BLACK TURN",True,BLACK)
-                text_rext = text.get_rect(center=(width // 2, 15))
-                screen.blit(text,text_rext)
+                text = "BLACK TURN"
             else:
-                text = font.render("WHITE TURN",True,WHITE)
-                text_rext = text.get_rect(center=(width // 2, 15))
-                screen.blit(text,text_rext)
-
+                text = "WHITE TURN"
+        text_surface = font.render(text,True,player[turn])
+        text_rect = text_surface.get_rect(center=(width//2,15))
+        screen.blit(text_surface,text_rect)
         pygame.display.update()
 
     pygame.quit()
