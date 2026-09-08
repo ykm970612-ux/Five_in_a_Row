@@ -56,7 +56,7 @@ def draw_stones(screen, board):
 
 def main():
     Background = (242,176,109)
-    font = pygame.font.SysFont("나눔스퀘어라운드extrabold",20)
+    font = pygame.font.SysFont("나눔스퀘어라운드",20)
     width = 600
     height = 600
     size = [width,height]
@@ -95,7 +95,7 @@ def main():
                     board = np.zeros((19, 19), dtype=int)
                     turn = 1
                     winner = 0
-                    
+
         screen.fill(Background)
         draw_board(screen,width,height)
         draw_stones(screen,board)
