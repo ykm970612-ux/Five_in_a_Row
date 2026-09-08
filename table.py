@@ -2,12 +2,14 @@ import pygame
 import check_win
 import numpy as np
 
+
 pygame.init()
 clock= pygame.time.Clock()
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 
 
+# 바둑판 그리기
 def draw_board(screen,width,height):
 
     
@@ -24,14 +26,15 @@ def draw_board(screen,width,height):
 
 
 
+# 마우스 좌표를 행렬기준 좌표로 변환
 def mouse_to_board(x,y):
     col = round(x / 30) - 1
     row = round(y / 30) - 1
 
     return row,col
 
-    
-    
+
+# 행렬에 색 칠하기
 def place_stone(board,row,col,color):
     if board[row][col]:
         return False
@@ -39,6 +42,7 @@ def place_stone(board,row,col,color):
 
     return True
 
+# 스크린에 돌 그리기
 def draw_stones(screen, board):
     color = {1:BLACK,2:WHITE}
     
@@ -78,9 +82,9 @@ def main():
             
             if event.type == pygame.QUIT:
                 Done = True
-                
-
+            # 마우스 입력
             if event.type == pygame.MOUSEBUTTONDOWN:
+                # 승리자가 나오면 클릭을 정지시킨다.
                 if winner == 0:
                     if event.button == 1:
                         row,col = mouse_to_board(*event.pos) 
@@ -89,25 +93,39 @@ def main():
                                 winner = check_win.check_win(board,row,col)
                                 if winner == 0:
                                     turn = turn%2 + 1
+                
 
+            # 키보드 R을 누르면 재시작.
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     board = np.zeros((19, 19), dtype=int)
                     turn = 1
                     winner = 0
 
+        # 스크린 칠하기
         screen.fill(Background)
         draw_board(screen,width,height)
         draw_stones(screen,board)
 
+        #승리자 판별
         if winner != 0:
             if winner == 1:
                 text = font.render("BLACK WIN",True,BLACK)
             else:
                 text = font.render("WHITE WIN",True,WHITE)
 
+            # width // 2, 15
             text_rext = text.get_rect(center=(width // 2, 15))
             screen.blit(text,text_rext)
+        else:
+            if turn == 1:
+                text = font.render("BLACK TURN",True,BLACK)
+                text_rext = text.get_rect(center=(width // 2, 15))
+                screen.blit(text,text_rext)
+            else:
+                text = font.render("WHITE TURN",True,WHITE)
+                text_rext = text.get_rect(center=(width // 2, 15))
+                screen.blit(text,text_rext)
 
         pygame.display.update()
 
